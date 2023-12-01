@@ -18,7 +18,7 @@ public class LoginTest extends Baselib {
 	@BeforeClass
 	@Parameters("platform")
 	public void setUp(@Optional("web") String platform) {
-		if (platform.equals("web")) {
+		if (platform.equals("web") || platform.equals("safari")) {
 			System.out.println("WEB");
 			loginElement = new LoginPageWeb(driver);
 
@@ -34,19 +34,24 @@ public class LoginTest extends Baselib {
 		}
 	}
 
-	@Test(priority = 0)
+	@Test(priority = 0,enabled=true)
 	public void TestLogin() throws Exception {
 		System.out.println(" TestLogin() ");
-		loginElement.login("gagandeep.bains@vtnetzwelt.com", "Password@123");
+		loginElement.login("gagandeep.bains@vtnetzwelt.com", "Password@12");
 	}
 	
-	@Test(priority = 1, dependsOnMethods = "TestLogin")
+	@Test(priority = 1/* , dependsOnMethods = "TestLogin" */,enabled = true)
 	public void TestCreateCustomer() throws Exception {
 		System.out.println(" TestCreateCustomer() ");
 		loginElement.createCustomer();
 	}
+//	@Test(priority = 2)
+//	public void TestCreateEmployee() throws Exception {
+//		System.out.println(" TestCreateEmployee() ");
+//		loginElement.createEmployee();;
+//	}
 
-	@Test(priority = 2, dependsOnMethods = "TestLogin")
+	@Test(priority = 3,enabled=true/* , dependsOnMethods = "TestLogin" */)
 	public void TestLogout() throws Exception {
 		System.out.println(" TestLogout() ");
 		loginElement.logout();

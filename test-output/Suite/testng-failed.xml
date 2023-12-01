@@ -1,38 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite parallel="tests" name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
-  <parameter name="platform" value="android"/>
+<suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
+  <parameter name="platform" value="web"/>
   <listeners>
     <listener class-name="com.baitcheckerios.listener.MyExtentListeners"/>
   </listeners>
-  <test thread-count="5" parallel="methods" name="TestWeb(failed)">
-    <parameter name="platform" value="web"/>
+  <test thread-count="5" name="Test(failed)">
     <classes>
       <class name="com.baitcheckerios.testscripts.LoginTest">
         <methods>
-          <include name="TestLogin"/>
-          <include name="TestCreateCustomer"/>
           <include name="launchApp"/>
           <include name="setUp"/>
-          <include name="TestLogout"/>
+          <include name="TestCreateEmployee"/>
           <include name="teardown"/>
         </methods>
       </class> <!-- com.baitcheckerios.testscripts.LoginTest -->
     </classes>
-  </test> <!-- TestWeb(failed) -->
-  <test thread-count="5" parallel="methods" name="TestAndroid(failed)">
-    <parameter name="platform" value="android"/>
-    <classes>
-      <class name="com.baitcheckerios.testscripts.LoginTest">
-        <methods>
-          <include name="TestLogin"/>
-          <include name="TestCreateCustomer"/>
-          <include name="launchApp"/>
-          <include name="setUp"/>
-          <include name="TestLogout"/>
-          <include name="teardown"/>
-        </methods>
-      </class> <!-- com.baitcheckerios.testscripts.LoginTest -->
-    </classes>
-  </test> <!-- TestAndroid(failed) -->
+  </test> <!-- Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

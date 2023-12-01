@@ -30,7 +30,7 @@ public class Baselib {
 	@Parameters("platform")
 	public void launchApp(String platform) throws Exception {
 
-		/* to run the test: mvn test -Dplatform=android */
+		/* to run the test: mvn test -Dplatform=ios */
 
 		if (platform.equalsIgnoreCase("android")) {
 
@@ -48,22 +48,28 @@ public class Baselib {
 		} else if (platform.equalsIgnoreCase("ios")) {
 			File file = new File(projectpath + "/src/test/resources/application/ConsumerScan.app");
 			DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
-			desiredCapabilities.setCapability("appium:automationName", "XCuiTest");
-			desiredCapabilities.setCapability("appium:platformName", "IOS");
-			desiredCapabilities.setCapability("appium:osVersion", "16.2");
-			desiredCapabilities.setCapability("appium:deviceName", "iPhone 14");
+
+			desiredCapabilities.setCapability("appium:automationName", "XCUITest");
+			desiredCapabilities.setCapability("appium:platformName", "ios");
+			// desiredCapabilities.setCapability("appium:osVersion", "17.1");
+			// desiredCapabilities.setCapability("appium:deviceName", "Surender’s iPhone");
 			desiredCapabilities.setCapability("appium:xcodeSignId", "iphone Developer");
-			desiredCapabilities.setCapability("appium:udid", "6B8F3712-E179-4908-91F0-CEC286DE80AD");
-			desiredCapabilities.setCapability("app", /* file.getAbsolutePath() */ "com.apple.mobileslideshow");
+			desiredCapabilities.setCapability("appium:udid", "00008110-0002048A022A801E");
+//			desiredCapabilities.setCapability("appium:udid", "00008020-001214382689002E");
+			desiredCapabilities.setCapability("showXcodeLog", true);
+			desiredCapabilities.setCapability("xcodeOrgId", "4G6NXA9PX6");
+//			desiredCapabilities.setCapability("app", /* file.getAbsolutePath() */ "com.apple.mobileslideshow");
+			
 			iosDriver = new IOSDriver(new URL("http://0.0.0.0:4723"), desiredCapabilities);
-			iosDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		//	iosDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		} else if (platform.equalsIgnoreCase("web")) {
 			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
-			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 			driver.navigate().refresh();
 		} else if (platform.equalsIgnoreCase("safari")) {
+			System.out.println("-----------I m in safari block");
 			driver = new SafariDriver();
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -76,7 +82,7 @@ public class Baselib {
 	public void teardown(String platform) {
 
 		if (platform.equalsIgnoreCase("web")) {
-			driver.quit();
+//			driver.quit();
 		}
 
 	}

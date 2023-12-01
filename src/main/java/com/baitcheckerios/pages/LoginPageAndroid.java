@@ -13,6 +13,7 @@ import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 
 public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> implements LoginElement {
@@ -43,6 +44,9 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 
 	@FindBy(xpath = "//android.widget.TextView[@text='Create customer account']")
 	private WebElement createCustomerAccount;
+	
+	@FindBy(xpath = "//android.widget.TextView[@text='Create employee account']")
+	private WebElement createEmployeeAccount;
 
 	@FindBy(xpath = "//android.widget.EditText[@text='Company name']")
 	private WebElement companyName;
@@ -95,7 +99,7 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	}
 	public void createCustomer() throws Exception {
 		String nameOfCompany="Company android";
-		System.out.println(" inside LoginPageWeb : createCustomer");
+		System.out.println(" inside LoginPageAndroid : createCustomer");
 		MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 3), driver, "plusIcon");
 		MobileUtility.clickElement(createCustomerAccount, driver, "createCustomerAccount");
 		MobileUtility.type(companyName, nameOfCompany,"companyName", driver);
@@ -110,6 +114,15 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 		MobileUtility.clickElement(showCustomers, driver, "showCustomers");
 		MobileUtility.scrollUsingFling(driver);
 		Assert.assertEquals(getCompanyName.getText(), nameOfCompany);
+	}
+	
+	public void createEmployee() throws Exception {
+		System.out.println(" inside LoginPageWeb : createEmployee");
+		 Activity activity = new Activity("com.baitchecker", "com.baitchecker.MainActivity");
+	        driver.startActivity(activity);
+	    				MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 3), driver, "plusIcon");
+			MobileUtility.clickElement(createEmployeeAccount, driver, "createEmployeeAccount");
+			
 	}
 
 	public void logout() throws Exception {
