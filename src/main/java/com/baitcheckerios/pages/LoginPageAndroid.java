@@ -77,11 +77,15 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	private WebElement showCustomers;
 	
 	public void login(String email, String pass) throws Exception {
-		System.out.println(" inside LoginPageAndroid : Login ");
+		MobileUtility.printLogInfo(" inside LoginPageAndroid : Login ");
 		driver.activateApp("com.baitchecker");
 		MobileUtility.type(emailField, email, "email", driver);
 		MobileUtility.type(passwordField, pass, "pass", driver);
 		MobileUtility.clickElement(loginBtn, driver, "loginBtn");
+		MobileUtility.printLogInfo(driver.getPageSource());
+		MobileUtility.printLogInfo(driver.getPageSource());
+		MobileUtility.printLogInfo(driver.getPageSource());
+		MobileUtility.waitForToastMessage(driver, "Your Toast Message", 10);
 		MobileUtility.waitForElement(welcomeText, driver, "welcomeText", 10);
 		boolean isWelcomeTextDisplayed = MobileUtility.isEleDisplayed(welcomeText, 5, 1, "welcomeText");
 		if (Boolean.TRUE.equals(isWelcomeTextDisplayed)) {
@@ -99,7 +103,7 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	}
 	public void createCustomer() throws Exception {
 		String nameOfCompany="Company android";
-		System.out.println(" inside LoginPageAndroid : createCustomer");
+		MobileUtility.printLogInfo(" inside LoginPageAndroid : createCustomer");
 		MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 3), driver, "plusIcon");
 		MobileUtility.clickElement(createCustomerAccount, driver, "createCustomerAccount");
 		MobileUtility.type(companyName, nameOfCompany,"companyName", driver);
@@ -117,7 +121,7 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	}
 	
 	public void createEmployee() throws Exception {
-		System.out.println(" inside LoginPageWeb : createEmployee");
+		MobileUtility.printLogInfo(" inside LoginPageWeb : createEmployee");
 		 Activity activity = new Activity("com.baitchecker", "com.baitchecker.MainActivity");
 	        driver.startActivity(activity);
 	    				MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 3), driver, "plusIcon");
@@ -126,7 +130,7 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	}
 
 	public void logout() throws Exception {
-		System.out.println(" inside LoginPageAndroid : Logout");
+		MobileUtility.printLogInfo(" inside LoginPageAndroid : Logout");
 		MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 1), driver, "logoutBtn");
 		MobileUtility.clickElement(logoutConfirmBtn, driver, "logoutConfirmBtn");
 		MobileUtility.waitForElement(loginAgainBtn, driver, "loginAgainBtn", 10);

@@ -10,6 +10,9 @@
 	<test name="Test">
 		<classes>
 			<class name="com.baitcheckerios.testscripts.LoginTest" />
+			<class name="com.baitcheckerios.testscripts.CreateCustomerTest" />
+			<class name="com.baitcheckerios.testscripts.CreateEmployeeTest" />
+			<class name="com.baitcheckerios.testscripts.LogoutTest" />
 		</classes>
 	</test>
 </suite> 

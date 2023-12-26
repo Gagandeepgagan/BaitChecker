@@ -12,7 +12,7 @@ public class GenericLib {
 	public static String sValidationFile = SDIRPATH + "/src/test/resources/testdata/validations.properties";
 	public static String sTestData = SDIRPATH + "/src/test/resources/testdata/testdata.xlsx";
 	public static String apkFilePath = SDIRPATH+ "/src/test/resources/app/MyScan_1.157.249.apk";
-
+	public static String screenShotPath=SDIRPATH+"/reports/screenshots/";
 
 
 	

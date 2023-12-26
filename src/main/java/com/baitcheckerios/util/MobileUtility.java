@@ -5,14 +5,14 @@ import static io.appium.java_client.touch.offset.PointOption.point;
 import static java.time.Duration.ofMillis;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.By;
@@ -22,7 +22,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
@@ -35,16 +34,18 @@ import org.testng.Assert;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.baitcheckerios.listener.MyExtentListeners;
-import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableList;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.touch.offset.PointOption;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 public class MobileUtility {
 	public static final String VERIFYCLICKMESSAGE = "Verify user is able to click on ";
@@ -62,6 +63,34 @@ public class MobileUtility {
 
 	public static void waitForElementToLoad(int milliSeconds) throws InterruptedException {
 		Thread.sleep(milliSeconds);
+	}
+	
+	public static String getDate() {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		String sDate = sdf.format(date);
+		return sDate;
+	}
+
+	public static void waitForToastMessage(AppiumDriver<MobileElement> driver, String toastMessage,
+			int timeoutSeconds) {
+		for (int i = 0; i < timeoutSeconds; i++) {
+			try {
+				MobileElement toastElement = driver.findElement(By.xpath("//android.widget.Toast"));
+				String actualToastMessage = toastElement.getText();
+				System.out.println("actualToastMessage: " + actualToastMessage);
+				if (actualToastMessage.equals(toastMessage)) {
+					return; // Toast message found, exit the loop
+				}
+			} catch (Exception e) {
+				// Toast not found, wait and retry
+			}
+			// Wait for a short period before retrying
+//            driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+		}
+		// If the loop completes without finding the toast, throw an exception or log an
+		// error
+		throw new RuntimeException("Toast message not found within the specified timeout.");
 	}
 
 	public static void clickOnElement(WebElement element, AppiumDriver<?> driver, String elementName) throws Exception {
@@ -98,7 +127,7 @@ public class MobileUtility {
 			printLogInfo("---------Verifying element : " + elementName + " is displayed or not ---------");
 			waitForElement(element, driver, elementName, 10);
 			element.click();
-			waitForElementToLoad(4000);
+//			waitForElementToLoad(1000);
 			printLogInfo(s);
 			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
 					+ " ||  User is able to click on " + "\'" + elementName + "\'");
@@ -141,20 +170,26 @@ public class MobileUtility {
 
 			printLogInfo("---------Verifying element is displayed or not ---------");
 			waitForElement(element, driver, elementName, 10);
+			JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+			jsExecutor.executeScript(
+					"arguments[0].setAttribute('style', 'border:2px solid green; background:lightblue');", element);
 			element.click();
-			waitForElementToLoad(4000);
+			waitForElementToLoad(2000);
 			printLogInfo(s);
-			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
-					+ " ||  User is able to click on " + "\'" + elementName + "\'");
+			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'" 
+					+ " ||  User is able to click on " + "\'" + elementName +"\'");
 		} catch (AssertionError error) {
-			MyExtentListeners.test.fail(MarkupHelper.createLabel(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
-					+ "  || User is not able to click on " + "\'" + elementName + "\'", ExtentColor.RED));
+			MyExtentListeners.test
+					.fail(MarkupHelper.createLabel(
+							VERIFYCLICKMESSAGE + "\'" + elementName + "\'" + "<font color=Cyan>"
+									+ "  || User is not able to click on " + "\'" + elementName + "\'",
+							ExtentColor.RED));
 
 			throw error;
 		} catch (Exception error) {
 			MyExtentListeners.test.fail(MarkupHelper.createLabel(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
 					+ " || User is not able to click on " + "\'" + elementName + "\'", ExtentColor.RED));
-			MyExtentListeners.test.addScreenCaptureFromPath(capture((AppiumDriver<?>) driver, elementName));
+			MyExtentListeners.test.addScreenCaptureFromPath(capture( driver, elementName));
 			throw error;
 		}
 
@@ -164,7 +199,7 @@ public class MobileUtility {
 			throws IOException, InterruptedException {
 		try {
 			printLogInfo("Waiting for visibility of element: " + elementName);
-			MobileUtility.isEleDisplayed(element, 2, 1, elementName);
+			isEleDisplayed(element, 2, 1, elementName);
 			WebDriverWait wait = new WebDriverWait(driver, seconds);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			printLogInfo("Element is visible : " + elementName);
@@ -182,7 +217,7 @@ public class MobileUtility {
 			throws IOException, InterruptedException {
 		try {
 			printLogInfo("Waiting for visibility of element: " + elementName);
-			MobileUtility.isEleDisplayed(element, 2, 1, elementName);
+			isEleDisplayed(element, 2, 1, elementName);
 			WebDriverWait wait = new WebDriverWait(driver, seconds);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			printLogInfo("Element is visible : " + elementName);
@@ -278,13 +313,17 @@ public class MobileUtility {
 	}
 
 	public static String getFlashMsgText(WebDriver driver, WebElement flashMessageLocator) {
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement flashMessageElement = wait.until(ExpectedConditions.visibilityOf(flashMessageLocator));
-		String flashMessageText = flashMessageElement.getText();
-		System.out.println("Flash Message: " + flashMessageText);
-		return flashMessageText;
+	    try {
+	        WebDriverWait wait = new WebDriverWait(driver, 10);
+	        WebElement flashMessageElement = wait.until(ExpectedConditions.visibilityOf(flashMessageLocator));
+	        String flashMessageText = flashMessageElement.getText();
+	        printLogInfo("Flash Message: " + flashMessageText);
+	        return flashMessageText;
+	    } catch (TimeoutException e) {
+	    	printLogInfo("Flash Message did not appear.");
+	        return ""; 
+	    }
 	}
-
 
 	public static void scrollinIOS(AppiumDriver<?> driver) {
 		try {
@@ -300,7 +339,7 @@ public class MobileUtility {
 		}
 	}
 
-	public static void scrollinIOStoElement(WebElement element,AppiumDriver<?> driver) {
+	public static void scrollinIOStoElement(WebElement element, AppiumDriver<?> driver) {
 		try {
 			printLogInfo("# Before (scrollinIOS) #");
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -315,7 +354,6 @@ public class MobileUtility {
 		}
 	}
 
-
 	public static void iosScrollToElement1(WebElement element, AppiumDriver<?> driver) throws InterruptedException {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		Map<String, Object> parms = new HashMap<>();
@@ -325,7 +363,7 @@ public class MobileUtility {
 
 		WebDriverWait wait = new WebDriverWait(driver, 10); // Adjust the timeout as needed
 		wait.until(ExpectedConditions.elementToBeClickable(element)).click();
-		Thread.sleep(1000);
+		waitForElementToLoad(1000);
 
 	}
 
@@ -336,7 +374,7 @@ public class MobileUtility {
 		scrollObject.put(DIRECTIONUP, "up");
 		scrollObject.put("name", text);
 		js.executeScript("mobile: swipe", scrollObject);
-		Thread.sleep(1000);
+		waitForElementToLoad(1000);
 
 	}
 
@@ -349,7 +387,7 @@ public class MobileUtility {
 			throws Exception {
 		try {
 			printLogInfo("---------Method type  ---------");
-			Thread.sleep(5000);
+			waitForElementToLoad(5000);
 			element.click();
 			element.sendKeys(value);
 			hideKeyboard(driver);
@@ -376,22 +414,51 @@ public class MobileUtility {
 		}
 	}
 
+	public static String encryptPassword(String password) throws Exception {
+		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+		SecretKey secretKey = keyGenerator.generateKey();
+
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+		byte[] encryptedPassword = cipher.doFinal(password.getBytes());
+
+		return new String(encryptedPassword);
+	}
+
+	public static String decryptPassword(String encryptedPassword) throws Exception {
+		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+		SecretKey secretKey = keyGenerator.generateKey();
+
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+		byte[] decryptedPassword = cipher.doFinal(encryptedPassword.getBytes());
+
+		return new String(decryptedPassword);
+	}
+
 	public static void type(WebElement element, String value, String elementName, WebDriver driver) throws Exception {
 		try {
 			printLogInfo("---------Method type  ---------");
-			Thread.sleep(5000);
+			waitForElementToLoad(5000);
+			JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+			jsExecutor.executeScript(
+					"arguments[0].setAttribute('style', 'border:2px solid green; background:lightblue');", element);
 			element.click();
 			element.sendKeys(value);
 
 			printLogInfo("---------hide keyboard  ---------");
-			MyExtentListeners.test
-					.info("Verify user is able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'"
-							+ " || User is able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'");
+			MyExtentListeners.test.info("Verify user is able to type " + "\'" + encryptPassword(value) + "\'" + "in "
+					+ "\'" + elementName + "\'" + " || User is able to type " + "\'" + encryptPassword(value) + "\'"
+					+ "in " + "\'" + elementName + "\'");
 		} catch (AssertionError error) {
-			MyExtentListeners.test.fail(MarkupHelper.createLabel(
-					"Verify user is not able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'"
-							+ " || User is not able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'",
-					ExtentColor.RED));
+			MyExtentListeners.test
+					.fail(MarkupHelper.createLabel(
+							"Verify user is not able to type " + "\'" + encryptPassword(value) + "\'" + "in " + "\'"
+									+ elementName + "\'" + " || User is not able to type " + "\'"
+									+ encryptPassword(value) + "\'" + "in " + "\'" + elementName + "\'",
+							ExtentColor.RED));
 
 			MyExtentListeners.test.addScreenCaptureFromPath(capture((AppiumDriver<?>) driver, elementName));
 			Assert.fail("Unable to type on " + elementName);
@@ -409,7 +476,7 @@ public class MobileUtility {
 	public static void hideKeyboard(AppiumDriver<?> driver) {
 		try {
 			driver.hideKeyboard();
-			Thread.sleep(2000);
+			waitForElementToLoad(2000);
 		} catch (Throwable e) {
 
 		}
@@ -457,71 +524,75 @@ public class MobileUtility {
 			printLogInfo("# catch: scrollUsingFling #");
 		}
 	}
-	 static double SCROLL_RATIO = 0.5;
-	 static Duration SCROLL_DUR = Duration.ofMillis(500);
-	 
-	 public static void scrollNclick(IOSDriver driver,WebElement byEl) {
-	        String prevPageSource = "";
-	        boolean flag = false;
 
-	        while (!isEndOfPage(driver,prevPageSource)) {
-	            prevPageSource = driver.getPageSource();
+	static double SCROLL_RATIO = 0.5;
+	static Duration SCROLL_DUR = Duration.ofMillis(500);
 
-	            try {
-	            	byEl.isDisplayed();
-	            	System.out.println("byEl.isDisplayed()");
-	            } catch (org.openqa.selenium.NoSuchElementException e) {
-	            	scrollinIOS(driver);
-	            	System.out.println("catch: byEl.isDisplayed()");
-	            }
-	        }
+	public static void scrollNclick(IOSDriver driver, WebElement byEl) {
+		String prevPageSource = "";
+		boolean flag = false;
 
-	    }
-	 public enum ScrollDirection {
-	        UP, DOWN, LEFT, RIGHT
-	    }
-	 public static void scroll(IOSDriver driver,ScrollDirection dir, double scrollRatio) {
+		while (!isEndOfPage(driver, prevPageSource)) {
+			prevPageSource = driver.getPageSource();
 
-	        if (scrollRatio < 0 || scrollRatio > 1) {
-	            throw new Error("Scroll distance must be between 0 and 1");
-	        }
-	        Dimension size = driver.manage().window().getSize();
-	        System.out.println(size);
-	        Point midPoint = new Point((int) (size.width * 0.5), (int) (size.height * 0.5));
-	        int bottom = midPoint.y + (int) (midPoint.y * scrollRatio);
-	        int top = midPoint.y - (int) (midPoint.y * scrollRatio);
-	        //Point Start = new Point(midPoint.x, bottom );
-	        //Point End = new Point(midPoint.x, top );
-	        int left = midPoint.x - (int) (midPoint.x * scrollRatio);
-	        int right = midPoint.x + (int) (midPoint.x * scrollRatio);
+			try {
+				byEl.isDisplayed();
+				System.out.println("byEl.isDisplayed()");
+			} catch (org.openqa.selenium.NoSuchElementException e) {
+				scrollinIOS(driver);
+				System.out.println("catch: byEl.isDisplayed()");
+			}
+		}
 
-	        if (dir == ScrollDirection.UP) {
-	            swipe(driver,new Point(midPoint.x, top), new Point(midPoint.x, bottom), SCROLL_DUR);
-	        } else if (dir == ScrollDirection.DOWN) {
-	            swipe(driver,new Point(midPoint.x, bottom), new Point(midPoint.x, top), SCROLL_DUR);
-	        } else if (dir == ScrollDirection.LEFT) {
-	            swipe(driver,new Point(left, midPoint.y), new Point(right, midPoint.y), SCROLL_DUR);
-	        } else {
-	            swipe(driver,new Point(right, midPoint.y), new Point(left, midPoint.y), SCROLL_DUR);
-	        }
-	    }
-	 protected static void swipe(IOSDriver driver,Point start, Point end, Duration duration) {
+	}
 
-	        PointerInput input = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
-	        Sequence swipe = new Sequence(input, 0);
-	        swipe.addAction(input.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), start.x, start.y));
-	        swipe.addAction(input.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
-	        /*if (isAndroid) {
-	            duration = duration.dividedBy(ANDROID_SCROLL_DIVISOR);
-	        } else {
-	            swipe.addAction(new Pause(input, duration));
-	            duration = Duration.ZERO;
-	        }*/
-	        swipe.addAction(input.createPointerMove(duration, PointerInput.Origin.viewport(), end.x, end.y));
-	        swipe.addAction(input.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
-	        ((AppiumDriver) driver).perform(ImmutableList.of(swipe));
-	    }
-	 public static boolean isEndOfPage(IOSDriver driver,String pageSource) {
-	        return pageSource.equals(driver.getPageSource());
-	    }
+	public enum ScrollDirection {
+		UP, DOWN, LEFT, RIGHT
+	}
+
+	public static void scroll(IOSDriver driver, ScrollDirection dir, double scrollRatio) {
+
+		if (scrollRatio < 0 || scrollRatio > 1) {
+			throw new Error("Scroll distance must be between 0 and 1");
+		}
+		Dimension size = driver.manage().window().getSize();
+		System.out.println(size);
+		Point midPoint = new Point((int) (size.width * 0.5), (int) (size.height * 0.5));
+		int bottom = midPoint.y + (int) (midPoint.y * scrollRatio);
+		int top = midPoint.y - (int) (midPoint.y * scrollRatio);
+		// Point Start = new Point(midPoint.x, bottom );
+		// Point End = new Point(midPoint.x, top );
+		int left = midPoint.x - (int) (midPoint.x * scrollRatio);
+		int right = midPoint.x + (int) (midPoint.x * scrollRatio);
+
+		if (dir == ScrollDirection.UP) {
+			swipe(driver, new Point(midPoint.x, top), new Point(midPoint.x, bottom), SCROLL_DUR);
+		} else if (dir == ScrollDirection.DOWN) {
+			swipe(driver, new Point(midPoint.x, bottom), new Point(midPoint.x, top), SCROLL_DUR);
+		} else if (dir == ScrollDirection.LEFT) {
+			swipe(driver, new Point(left, midPoint.y), new Point(right, midPoint.y), SCROLL_DUR);
+		} else {
+			swipe(driver, new Point(right, midPoint.y), new Point(left, midPoint.y), SCROLL_DUR);
+		}
+	}
+
+	protected static void swipe(IOSDriver driver, Point start, Point end, Duration duration) {
+
+		PointerInput input = new PointerInput(PointerInput.Kind.TOUCH, "finger1");
+		Sequence swipe = new Sequence(input, 0);
+		swipe.addAction(input.createPointerMove(Duration.ZERO, PointerInput.Origin.viewport(), start.x, start.y));
+		swipe.addAction(input.createPointerDown(PointerInput.MouseButton.LEFT.asArg()));
+		/*
+		 * if (isAndroid) { duration = duration.dividedBy(ANDROID_SCROLL_DIVISOR); }
+		 * else { swipe.addAction(new Pause(input, duration)); duration = Duration.ZERO;
+		 * }
+		 */
+		swipe.addAction(input.createPointerMove(duration, PointerInput.Origin.viewport(), end.x, end.y));
+		swipe.addAction(input.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+		((AppiumDriver) driver).perform(ImmutableList.of(swipe));
+	}
+
+	public static boolean isEndOfPage(IOSDriver driver, String pageSource) {
+		return pageSource.equals(driver.getPageSource());
+	}
 }

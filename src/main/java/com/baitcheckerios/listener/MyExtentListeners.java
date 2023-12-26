@@ -124,7 +124,8 @@ public class MyExtentListeners implements ITestListener {
 //			logger.info("--Extent folder created");
 
 		}
-		String filepath = htmlDir + "Report" + ".html";
+		
+		String filepath = htmlDir + "Report" +sDate+ ".html";
 	//	logger.info(filepath);
 		File file1 = new File(filepath);
 		if (!(file1.exists())) {

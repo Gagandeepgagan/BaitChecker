@@ -13,11 +13,8 @@ import com.baitcheckerios.library.BasePage;
 import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
-import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
-import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class LoginPageIos extends BasePage<IOSDriver<MobileElement>> implements LoginElement {
 
@@ -104,14 +101,14 @@ public class LoginPageIos extends BasePage<IOSDriver<MobileElement>> implements 
 	
 	public void login(String email, String pass) throws Exception {
 		
-		System.out.println(" inside LoginPageIos : Login ");
+		MobileUtility.printLogInfo(" inside LoginPageIos : Login ");
 		driver.activateApp("com.baitchecker1");
 		MobileUtility.type(emailField, email+ Keys.ENTER, "email", driver);
 		MobileUtility.type(passwordField, pass+ Keys.ENTER, "pass", driver);
 		MobileUtility.clickElement(loginBtn, driver, "loginBtn");
 		MobileUtility.waitForElement(welcomeText, driver, "welcomeText", 10);
 		boolean isWelcomeTextDisplayed = MobileUtility.isEleDisplayed(welcomeText, 2, 3, "welcomeText");
-		System.out.println(isWelcomeTextDisplayed);
+		MobileUtility.printLogInfo(String.valueOf(isWelcomeTextDisplayed));
 		if (Boolean.TRUE.equals(isWelcomeTextDisplayed)) {
 			MobileUtility.printLogInfo("User is logged in successfully");
 			MyExtentListeners.test.pass(MarkupHelper
@@ -130,7 +127,7 @@ public class LoginPageIos extends BasePage<IOSDriver<MobileElement>> implements 
 
 	public void createCustomer() throws Exception {
 		String nameOfCompany="dvdf";
-		System.out.println(" inside LoginPageIos : createCustomer");
+		MobileUtility.printLogInfo(" inside LoginPageIos : createCustomer");
 		MobileUtility.clickElement(plusBtn, driver, "plusIcon");
 		MobileUtility.clickElement(createCustomerAccount, driver, "createCustomerAccount");
 		MobileUtility.type(companyName, nameOfCompany+Keys.ENTER,"companyName", driver);
@@ -149,7 +146,7 @@ public class LoginPageIos extends BasePage<IOSDriver<MobileElement>> implements 
 		MobileUtility.clickElement(saveToCreateCustomerBtn, driver, "saveToCreateCustomerBtn");
 		MobileUtility.clickElement(showCustomers, driver, "showCustomers");
 //		MobileUtility.scrollNclick(driver,hideCustomers);
-		System.out.println(getCompanyName.get(getCompanyName.size()-1).getText());
+		MobileUtility.printLogInfo(getCompanyName.get(getCompanyName.size()-1).getText());
 		Assert.assertEquals(getCompanyName.get(getCompanyName.size()-1).getText(), nameOfCompany);
 	}
 
@@ -158,7 +155,7 @@ public class LoginPageIos extends BasePage<IOSDriver<MobileElement>> implements 
 	}
 
 	public void logout() throws Exception {
-		System.out.println(" inside LoginPageIos : Logout  ");
+		MobileUtility.printLogInfo(" inside LoginPageIos : Logout  ");
 		MobileUtility.clickElement(logoutBtn, driver, "logoutBtn");
 		MobileUtility.clickElement(logoutConfirmBtn, driver, "logoutConfirmBtn");
 		MobileUtility.waitForElement(loginAgainBtn, driver, "loginAgainBtn", 10);

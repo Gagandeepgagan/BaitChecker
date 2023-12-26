@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterSuite;
@@ -37,15 +36,16 @@ public class Baselib {
 			File file = new File(projectpath + "/src/test/resources/application/Baitchecker.apk");
 			DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 			desiredCapabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "uiautomator2");
-			desiredCapabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "08261JECB11358");
+//			desiredCapabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "08261JECB11358");
 			desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
-			desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13");
+//			desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13");
 			desiredCapabilities.setCapability("newCommandTimeout", 450000);
 			desiredCapabilities.setCapability("autoGrantPermissions", true);
 			desiredCapabilities.setCapability(MobileCapabilityType.APP, file.getAbsolutePath());
 			androidDriver = new AndroidDriver(new URL("http://0.0.0.0:4723"), desiredCapabilities);
 			androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		} else if (platform.equalsIgnoreCase("ios")) {
+			
 			File file = new File(projectpath + "/src/test/resources/application/ConsumerScan.app");
 			DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 
@@ -63,13 +63,15 @@ public class Baselib {
 			iosDriver = new IOSDriver(new URL("http://0.0.0.0:4723"), desiredCapabilities);
 		//	iosDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		} else if (platform.equalsIgnoreCase("web")) {
+			
 			WebDriverManager.chromedriver().setup();
-			driver = new ChromeDriver();
-			driver.manage().window().maximize();
-//			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-			driver.navigate().refresh();
+			ChromeOptions opt=new ChromeOptions();
+			opt.setExperimentalOption("debuggerAddress","localhost:55697");
+			driver = new ChromeDriver(opt);
+//			driver.manage().window().maximize();
+//			driver.navigate().refresh();
 		} else if (platform.equalsIgnoreCase("safari")) {
-			System.out.println("-----------I m in safari block");
+			
 			driver = new SafariDriver();
 			driver.manage().window().maximize();
 			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

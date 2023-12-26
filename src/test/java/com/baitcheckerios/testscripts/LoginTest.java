@@ -1,6 +1,7 @@
 package com.baitcheckerios.testscripts;
 
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -34,26 +35,21 @@ public class LoginTest extends Baselib {
 		}
 	}
 
-	@Test(priority = 0,enabled=true)
-	public void TestLogin() throws Exception {
-		System.out.println(" TestLogin() ");
-		loginElement.login("gagandeep.bains@vtnetzwelt.com", "Password@12");
-	}
-	
-	@Test(priority = 1/* , dependsOnMethods = "TestLogin" */,enabled = true)
-	public void TestCreateCustomer() throws Exception {
-		System.out.println(" TestCreateCustomer() ");
-		loginElement.createCustomer();
-	}
-//	@Test(priority = 2)
-//	public void TestCreateEmployee() throws Exception {
-//		System.out.println(" TestCreateEmployee() ");
-//		loginElement.createEmployee();;
-//	}
+	@DataProvider(name = "loginData")
+	public Object[][] loginData() {
+		return new Object[][] {
 
-	@Test(priority = 3,enabled=true/* , dependsOnMethods = "TestLogin" */)
-	public void TestLogout() throws Exception {
-		System.out.println(" TestLogout() ");
-		loginElement.logout();
+				{ "gagandeep.bains@vtnetzwelt.com", "" }, { "", "Password@123" },
+				{ "gagandeep.bains@vtnetzwelt.com", "Test@123" },
+				{ "gagandeep.bains@vtnetzwelt", "Password@123" },
+				{ "gagandeep.bains+6@vtnetzwelt.com", "Password@123" },
+				{ "gagandeep.bains@vtnetzwelt.com", "Password@123" } };
 	}
+
+	@Test(priority = 0, enabled = true, dataProvider = "loginData")
+	public void TestLogin(String email, String password) throws Exception {
+		System.out.println(" TestLogin() ");
+		loginElement.login(email, password);
+	}
+
 }
