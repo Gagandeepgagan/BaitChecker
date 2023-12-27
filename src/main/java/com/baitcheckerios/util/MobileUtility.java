@@ -449,6 +449,41 @@ public class MobileUtility {
 			element.sendKeys(value);
 
 			printLogInfo("---------hide keyboard  ---------");
+			MyExtentListeners.test.info("Verify user is able to type " + "\'" + value + "\'" + "in "
+					+ "\'" + elementName + "\'" + " || User is able to type " + "\'" + value + "\'"
+					+ "in " + "\'" + elementName + "\'");
+		} catch (AssertionError error) {
+			MyExtentListeners.test
+					.fail(MarkupHelper.createLabel(
+							"Verify user is not able to type " + "\'" + value + "\'" + "in " + "\'"
+									+ elementName + "\'" + " || User is not able to type " + "\'"
+									+ value + "\'" + "in " + "\'" + elementName + "\'",
+							ExtentColor.RED));
+
+			MyExtentListeners.test.addScreenCaptureFromPath(capture((AppiumDriver<?>) driver, elementName));
+			Assert.fail("Unable to type on " + elementName);
+		} catch (ElementNotVisibleException e) {
+			MyExtentListeners.test.fail(MarkupHelper.createLabel(
+					"Verify user is not typed " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'"
+							+ " || User is not able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'",
+					ExtentColor.RED));
+
+			MyExtentListeners.test.addScreenCaptureFromPath(capture((AppiumDriver<?>) driver, elementName));
+			Assert.fail("Unable to type in " + elementName);
+		}
+	}
+	
+	public static void typeEncrypted(WebElement element, String value, String elementName, WebDriver driver) throws Exception {
+		try {
+			printLogInfo("---------Method type  ---------");
+			waitForElementToLoad(5000);
+			JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+			jsExecutor.executeScript(
+					"arguments[0].setAttribute('style', 'border:2px solid green; background:lightblue');", element);
+			element.click();
+			element.sendKeys(value);
+
+			printLogInfo("---------hide keyboard  ---------");
 			MyExtentListeners.test.info("Verify user is able to type " + "\'" + encryptPassword(value) + "\'" + "in "
 					+ "\'" + elementName + "\'" + " || User is able to type " + "\'" + encryptPassword(value) + "\'"
 					+ "in " + "\'" + elementName + "\'");

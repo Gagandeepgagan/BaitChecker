@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.LogoutPageWeb;
+import com.baitcheckerios.util.MobileUtility;
 import com.baitcheckerios.pages.LogoutElement;
 
 public class LogoutTest extends Baselib {
@@ -35,7 +36,7 @@ public class LogoutTest extends Baselib {
 
 	@Test(priority = 3, enabled = true/* , dependsOnMethods = "TestLogin" */)
 	public void TestLogout() throws Exception {
-		System.out.println(" TestLogout() ");
+		MobileUtility.printLogInfo(" TestLogout() ");
 		logoutElement.logout();
 	}
 }

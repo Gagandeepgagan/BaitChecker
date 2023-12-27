@@ -11,6 +11,7 @@ import com.baitcheckerios.pages.LoginElement;
 import com.baitcheckerios.pages.LoginPageAndroid;
 import com.baitcheckerios.pages.LoginPageIos;
 import com.baitcheckerios.pages.LoginPageWeb;
+import com.baitcheckerios.util.MobileUtility;
 
 public class LoginTest extends Baselib {
 
@@ -22,11 +23,11 @@ public class LoginTest extends Baselib {
 		if (platform.equals("web") || platform.equals("safari")) {
 			System.out.println("WEB");
 			loginElement = new LoginPageWeb(driver);
-
+		
 		} else if (platform.equals("ios")) {
 			System.out.println("IOS");
 			loginElement = new LoginPageIos(iosDriver);
-
+	
 		} else if (platform.equals("android")) {
 			System.out.println("ANDROID");
 			loginElement = new LoginPageAndroid(androidDriver);
@@ -48,8 +49,10 @@ public class LoginTest extends Baselib {
 
 	@Test(priority = 0, enabled = true, dataProvider = "loginData")
 	public void TestLogin(String email, String password) throws Exception {
-		System.out.println(" TestLogin() ");
+		MobileUtility.printLogInfo(" TestLogin() ");
 		loginElement.login(email, password);
+		
+		
 	}
 
 }

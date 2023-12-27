@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.CustomerElement;
 import com.baitcheckerios.pages.CustomerPageWeb;
+import com.baitcheckerios.util.MobileUtility;
 
 public class CreateCustomerTest extends Baselib {
 
@@ -34,9 +35,9 @@ public class CreateCustomerTest extends Baselib {
 
 	
 
-	@Test(priority = 1, enabled = false/* , dependsOnMethods = "TestLogin" */)
+	@Test(priority = 1, enabled = true)
 	public void TestCreateCustomer() throws Exception {
-		System.out.println(" TestCreateCustomer() ");
+		MobileUtility.printLogInfo(" TestCreateCustomer() ");
 		customerElement.createCustomer();
 	}
 

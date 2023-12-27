@@ -38,7 +38,7 @@ public class LoginPageWeb extends BasePage<WebDriver> implements LoginElement {
 		driver.get("https://bait-staging-web.vtnetzwelt.com/login");
 		MobileUtility.waitForElementToLoad(4000);
 		MobileUtility.type(emailField, email, "email", driver);
-		MobileUtility.type(passwordField, pass, "pass", driver);
+		MobileUtility.typeEncrypted(passwordField, pass, "pass", driver);
 		MobileUtility.clickElement(loginBtn, driver, "loginBtn");
 		String screenshotName="login"+MobileUtility.getDate();
 		MobileUtility.capture(driver, screenshotName);
@@ -70,5 +70,6 @@ public class LoginPageWeb extends BasePage<WebDriver> implements LoginElement {
 		
 	}
 
+	
 	
 }

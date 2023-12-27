@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.EmployeeElement;
 import com.baitcheckerios.pages.EmployeePageWeb;
+import com.baitcheckerios.util.MobileUtility;
 
 public class CreateEmployeeTest extends Baselib {
 
@@ -35,7 +36,7 @@ public class CreateEmployeeTest extends Baselib {
 
 	@Test(priority = 2)
 	public void TestCreateEmployee() throws Exception {
-		System.out.println(" TestCreateEmployee() ");
+		MobileUtility.printLogInfo(" TestCreateEmployee() ");
 		employeeElement.createEmployee();;
 	}
 }
