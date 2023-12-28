@@ -7,14 +7,30 @@
   </listeners>
   <test thread-count="5" name="Test(failed)">
     <classes>
-      <class name="com.baitcheckerios.testscripts.LoginTest">
+      <class name="com.baitcheckerios.testscripts.CreateEmployeeTest">
         <methods>
+          <include name="TestCreateEmployee"/>
           <include name="launchApp"/>
           <include name="setUp"/>
-          <include name="TestCreateEmployee"/>
           <include name="teardown"/>
         </methods>
-      </class> <!-- com.baitcheckerios.testscripts.LoginTest -->
+      </class> <!-- com.baitcheckerios.testscripts.CreateEmployeeTest -->
+      <class name="com.baitcheckerios.testscripts.LogoutTest">
+        <methods>
+          <include name="TestLogout"/>
+          <include name="launchApp"/>
+          <include name="setUp"/>
+          <include name="teardown"/>
+        </methods>
+      </class> <!-- com.baitcheckerios.testscripts.LogoutTest -->
+      <class name="com.baitcheckerios.testscripts.CreateCustomerTest">
+        <methods>
+          <include name="TestCreateCustomer"/>
+          <include name="launchApp"/>
+          <include name="setUp"/>
+          <include name="teardown"/>
+        </methods>
+      </class> <!-- com.baitcheckerios.testscripts.CreateCustomerTest -->
     </classes>
   </test> <!-- Test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

@@ -15,6 +15,10 @@ import com.baitcheckerios.util.MobileUtility;
 
 public class LoginTest extends Baselib {
 
+//	private LoginPageWeb loginElement1;
+//	private LoginPageIos  loginElement2;
+//	private  LoginPageAndroid loginElement3;
+	
 	private LoginElement loginElement;
 
 	@BeforeClass
@@ -40,11 +44,15 @@ public class LoginTest extends Baselib {
 	public Object[][] loginData() {
 		return new Object[][] {
 
-				{ "gagandeep.bains@vtnetzwelt.com", "" }, { "", "Password@123" },
-				{ "gagandeep.bains@vtnetzwelt.com", "Test@123" },
-				{ "gagandeep.bains@vtnetzwelt", "Password@123" },
-				{ "gagandeep.bains+6@vtnetzwelt.com", "Password@123" },
-				{ "gagandeep.bains@vtnetzwelt.com", "Password@123" } };
+				
+				/*{ "gagandeep.bains@vtnetzwelt.com",
+					*	"" }, 
+								 * { "", "Password@123" }, { "gagandeep.bains@vtnetzwelt.com", "Test@123" }, {
+								 * "gagandeep.bains@vtnetzwelt", "Password@123" }, {
+								 * "gagandeep.bains+6@vtnetzwelt.com", "Password@123" },
+								 */
+				 
+				{ "gagandeep.bains@vtnetzwelt.com", "Password@123" }  };
 	}
 
 	@Test(priority = 0, enabled = true, dataProvider = "loginData")

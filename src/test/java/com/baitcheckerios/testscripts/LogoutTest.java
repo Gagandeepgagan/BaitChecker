@@ -6,12 +6,14 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.baitcheckerios.library.Baselib;
+import com.baitcheckerios.pages.LogoutElement;
+import com.baitcheckerios.pages.LogoutPageAndroid;
 import com.baitcheckerios.pages.LogoutPageWeb;
 import com.baitcheckerios.util.MobileUtility;
-import com.baitcheckerios.pages.LogoutElement;
 
 public class LogoutTest extends Baselib {
 
+	private LogoutPageWeb logoutElement1;
 	private LogoutElement logoutElement;
 
 	@BeforeClass
@@ -27,7 +29,7 @@ public class LogoutTest extends Baselib {
 
 		} else if (platform.equals("android")) {
 			System.out.println("ANDROID");
-			
+			logoutElement = new LogoutPageAndroid(androidDriver);
 		} else {
 			throw new IllegalArgumentException("Invalid platform provided");
 		}

@@ -13,15 +13,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
@@ -33,6 +38,7 @@ import org.testng.Assert;
 
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.baitcheckerios.library.GenericLib;
 import com.baitcheckerios.listener.MyExtentListeners;
 import com.google.common.collect.ImmutableList;
 
@@ -40,12 +46,11 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.touch.offset.PointOption;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 public class MobileUtility {
 	public static final String VERIFYCLICKMESSAGE = "Verify user is able to click on ";
@@ -65,11 +70,45 @@ public class MobileUtility {
 		Thread.sleep(milliSeconds);
 	}
 	
+	public static void scrollByCoordinates(AndroidDriver<MobileElement> driver) {
+		 new TouchAction(driver).press(PointOption.point(500, 1800)).waitAction()
+         .moveTo(PointOption.point(500, 400))
+         .release().perform();
+	}
+	
+	public static void stopAParticularAppActivity(AndroidDriver<MobileElement> driver) {
+        try {
+
+        	printLogInfo("# inside stopAParticularAppActivity # ");
+
+        	  ((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.APP_SWITCH));
+            new TouchAction(driver).press(PointOption.point(500, 2200)).waitAction()
+                    .moveTo(PointOption.point(500, 100))
+                    .release().perform();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 	public static String getDate() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 		String sDate = sdf.format(date);
 		return sDate;
+	}
+
+	public static void checkValidationMsg(String screenshotName, WebDriver driver, WebElement element)
+			throws IOException {
+		String sshotName = screenshotName + MobileUtility.getDate();
+		MobileUtility.capture(driver, sshotName);
+		String validateMsg = MobileUtility.getFlashMsgText(driver, element);
+		if (validateMsg != null && !validateMsg.isEmpty()) {
+			MyExtentListeners.test.fail(MarkupHelper.createLabel(
+					"Verify if user is able to create customer ||  " + "\'" + validateMsg + "\'", ExtentColor.RED));
+			MyExtentListeners.test.addScreenCaptureFromPath(GenericLib.screenShotPath + sshotName + ".png");
+			Assert.fail("Failed: " + validateMsg);
+		}
 	}
 
 	public static void waitForToastMessage(AppiumDriver<MobileElement> driver, String toastMessage,
@@ -127,7 +166,7 @@ public class MobileUtility {
 			printLogInfo("---------Verifying element : " + elementName + " is displayed or not ---------");
 			waitForElement(element, driver, elementName, 10);
 			element.click();
-//			waitForElementToLoad(1000);
+			waitForElementToLoad(1000);
 			printLogInfo(s);
 			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
 					+ " ||  User is able to click on " + "\'" + elementName + "\'");
@@ -176,8 +215,8 @@ public class MobileUtility {
 			element.click();
 			waitForElementToLoad(2000);
 			printLogInfo(s);
-			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'" 
-					+ " ||  User is able to click on " + "\'" + elementName +"\'");
+			MyExtentListeners.test.info(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
+					+ " ||  User is able to click on " + "\'" + elementName + "\'");
 		} catch (AssertionError error) {
 			MyExtentListeners.test
 					.fail(MarkupHelper.createLabel(
@@ -189,7 +228,7 @@ public class MobileUtility {
 		} catch (Exception error) {
 			MyExtentListeners.test.fail(MarkupHelper.createLabel(VERIFYCLICKMESSAGE + "\'" + elementName + "\'"
 					+ " || User is not able to click on " + "\'" + elementName + "\'", ExtentColor.RED));
-			MyExtentListeners.test.addScreenCaptureFromPath(capture( driver, elementName));
+			MyExtentListeners.test.addScreenCaptureFromPath(capture(driver, elementName));
 			throw error;
 		}
 
@@ -228,6 +267,15 @@ public class MobileUtility {
 			MyExtentListeners.test.addScreenCaptureFromPath(capture(driver, elementName));
 			printLogInfo("---------Element is not visible---------" + elementName);
 			throw e;
+		}
+	}
+
+	public static boolean isElementDisplayed(WebElement element) {
+		try {
+			return element.isDisplayed();
+
+		} catch (Exception e) {
+			return false;
 		}
 	}
 
@@ -313,16 +361,16 @@ public class MobileUtility {
 	}
 
 	public static String getFlashMsgText(WebDriver driver, WebElement flashMessageLocator) {
-	    try {
-	        WebDriverWait wait = new WebDriverWait(driver, 10);
-	        WebElement flashMessageElement = wait.until(ExpectedConditions.visibilityOf(flashMessageLocator));
-	        String flashMessageText = flashMessageElement.getText();
-	        printLogInfo("Flash Message: " + flashMessageText);
-	        return flashMessageText;
-	    } catch (TimeoutException e) {
-	    	printLogInfo("Flash Message did not appear.");
-	        return ""; 
-	    }
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, 10);
+			WebElement flashMessageElement = wait.until(ExpectedConditions.visibilityOf(flashMessageLocator));
+			String flashMessageText = flashMessageElement.getText();
+			printLogInfo("Flash Message: " + flashMessageText);
+			return flashMessageText;
+		} catch (TimeoutException e) {
+			printLogInfo("Flash Message did not appear.");
+			return "";
+		}
 	}
 
 	public static void scrollinIOS(AppiumDriver<?> driver) {
@@ -387,8 +435,9 @@ public class MobileUtility {
 			throws Exception {
 		try {
 			printLogInfo("---------Method type  ---------");
-			waitForElementToLoad(5000);
+			waitForElementToLoad(1000);
 			element.click();
+			element.clear();
 			element.sendKeys(value);
 			hideKeyboard(driver);
 			printLogInfo("---------hide keyboard  ---------");
@@ -446,19 +495,18 @@ public class MobileUtility {
 			jsExecutor.executeScript(
 					"arguments[0].setAttribute('style', 'border:2px solid green; background:lightblue');", element);
 			element.click();
+			((JavascriptExecutor) driver).executeScript("arguments[0].value = '';", element);
 			element.sendKeys(value);
 
 			printLogInfo("---------hide keyboard  ---------");
-			MyExtentListeners.test.info("Verify user is able to type " + "\'" + value + "\'" + "in "
-					+ "\'" + elementName + "\'" + " || User is able to type " + "\'" + value + "\'"
-					+ "in " + "\'" + elementName + "\'");
-		} catch (AssertionError error) {
 			MyExtentListeners.test
-					.fail(MarkupHelper.createLabel(
-							"Verify user is not able to type " + "\'" + value + "\'" + "in " + "\'"
-									+ elementName + "\'" + " || User is not able to type " + "\'"
-									+ value + "\'" + "in " + "\'" + elementName + "\'",
-							ExtentColor.RED));
+					.info("Verify user is able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'"
+							+ " || User is able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'");
+		} catch (AssertionError error) {
+			MyExtentListeners.test.fail(MarkupHelper.createLabel(
+					"Verify user is not able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'"
+							+ " || User is not able to type " + "\'" + value + "\'" + "in " + "\'" + elementName + "\'",
+					ExtentColor.RED));
 
 			MyExtentListeners.test.addScreenCaptureFromPath(capture((AppiumDriver<?>) driver, elementName));
 			Assert.fail("Unable to type on " + elementName);
@@ -472,8 +520,9 @@ public class MobileUtility {
 			Assert.fail("Unable to type in " + elementName);
 		}
 	}
-	
-	public static void typeEncrypted(WebElement element, String value, String elementName, WebDriver driver) throws Exception {
+
+	public static void typeEncrypted(WebElement element, String value, String elementName, WebDriver driver)
+			throws Exception {
 		try {
 			printLogInfo("---------Method type  ---------");
 			waitForElementToLoad(5000);

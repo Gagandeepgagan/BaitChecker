@@ -9,16 +9,31 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">Suite</th></tr>
-<tr><td><a href="#t0">Test</a></td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">111,102</td><td></td><td></td></tr>
+<tr><td><a href="#t0">Test</a></td><td class="num">0</td><td class="num attn">3</td><td class="num">0</td><td class="num">0</td><td class="num">588</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">com.baitcheckerios.testscripts.LoginTest</td><td><a href="#m0">TestCreateEmployee</a></td><td rowspan="1">1700454301678</td><td rowspan="1">76141</td></tr><tr><th colspan="4">Test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="1">com.baitcheckerios.testscripts.LoginTest</td><td><a href="#m1">TestLogin</a></td><td rowspan="1">1700454267033</td><td rowspan="1">34400</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Test &#8212; failed (configuration methods)</th></tr><tr class="failedeven"><td rowspan="1">com.baitcheckerios.testscripts.CreateEmployeeTest</td><td><a href="#m0">setUp</a></td><td rowspan="1">1703671763732</td><td rowspan="1">6</td></tr><tr><th colspan="4">Test &#8212; skipped (configuration methods)</th></tr><tr class="skippedeven"><td rowspan="1">com.baitcheckerios.testscripts.CreateCustomerTest</td><td><a href="#m1">teardown</a></td><td rowspan="1">1703671764095</td><td rowspan="1">-1703671764095</td></tr><tr class="skippedodd"><td rowspan="1">com.baitcheckerios.testscripts.LogoutTest</td><td><a href="#m2">setUp</a></td><td rowspan="1">1703671763743</td><td rowspan="1">-1703671763743</td></tr><tr><th colspan="4">Test &#8212; skipped</th></tr><tr class="skippedeven"><td rowspan="1">com.baitcheckerios.testscripts.CreateCustomerTest</td><td><a href="#m3">TestCreateCustomer</a></td><td rowspan="1">1703671763759</td><td rowspan="1">0</td></tr><tr class="skippedodd"><td rowspan="1">com.baitcheckerios.testscripts.CreateEmployeeTest</td><td><a href="#m4">TestCreateEmployee</a></td><td rowspan="1">1703671764027</td><td rowspan="1">0</td></tr><tr class="skippedeven"><td rowspan="1">com.baitcheckerios.testscripts.LogoutTest</td><td><a href="#m5">TestLogout</a></td><td rowspan="1">1703671764044</td><td rowspan="1">0</td></tr></tbody>
 </table>
-<h2>Test</h2><h3 id="m0">com.baitcheckerios.testscripts.LoginTest#TestCreateEmployee</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.ClassCastException: class org.openqa.selenium.chrome.ChromeDriver cannot be cast to class io.appium.java_client.AppiumDriver (org.openqa.selenium.chrome.ChromeDriver and io.appium.java_client.AppiumDriver are in unnamed module of loader &apos;app&apos;)
-	at com.baitcheckerios.util.MobileUtility.clickElement(MobileUtility.java:137)
-	at com.baitcheckerios.pages.LoginPageWeb.createEmployee(LoginPageWeb.java:127)
-	at com.baitcheckerios.testscripts.LoginTest.TestCreateEmployee(LoginTest.java:51)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
-... Removed 27 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h3 id="m1">com.baitcheckerios.testscripts.LoginTest#TestLogin</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h2>Test</h2><h3 id="m0">com.baitcheckerios.testscripts.CreateEmployeeTest#setUp</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>web</td></tr><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;org.openqa.selenium.WebDriver.manage()&quot; because &quot;driver&quot; is null
+	at com.baitcheckerios.library.BasePage.&lt;init&gt;(BasePage.java:14)
+	at com.baitcheckerios.pages.EmployeePageWeb.&lt;init&gt;(EmployeePageWeb.java:20)
+	at com.baitcheckerios.testscripts.CreateEmployeeTest.setUp(CreateEmployeeTest.java:23)
+... Removed 24 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m1">com.baitcheckerios.testscripts.CreateCustomerTest#teardown</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m2">com.baitcheckerios.testscripts.LogoutTest#setUp</h3><table class="result"><tr><th class="invisible"/></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m3">com.baitcheckerios.testscripts.CreateCustomerTest#TestCreateCustomer</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;org.openqa.selenium.WebDriver.manage()&quot; because &quot;driver&quot; is null
+	at com.baitcheckerios.library.BasePage.&lt;init&gt;(BasePage.java:14)
+	at com.baitcheckerios.pages.EmployeePageWeb.&lt;init&gt;(EmployeePageWeb.java:20)
+	at com.baitcheckerios.testscripts.CreateEmployeeTest.setUp(CreateEmployeeTest.java:23)
+... Removed 24 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m4">com.baitcheckerios.testscripts.CreateEmployeeTest#TestCreateEmployee</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;org.openqa.selenium.WebDriver.manage()&quot; because &quot;driver&quot; is null
+	at com.baitcheckerios.library.BasePage.&lt;init&gt;(BasePage.java:14)
+	at com.baitcheckerios.pages.EmployeePageWeb.&lt;init&gt;(EmployeePageWeb.java:20)
+	at com.baitcheckerios.testscripts.CreateEmployeeTest.setUp(CreateEmployeeTest.java:23)
+... Removed 24 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
+<h3 id="m5">com.baitcheckerios.testscripts.LogoutTest#TestLogout</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException: Cannot invoke &quot;org.openqa.selenium.WebDriver.manage()&quot; because &quot;driver&quot; is null
+	at com.baitcheckerios.library.BasePage.&lt;init&gt;(BasePage.java:14)
+	at com.baitcheckerios.pages.EmployeePageWeb.&lt;init&gt;(EmployeePageWeb.java:20)
+	at com.baitcheckerios.testscripts.CreateEmployeeTest.setUp(CreateEmployeeTest.java:23)
+... Removed 24 stack frames</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
 </body>
 </html>

@@ -3,19 +3,22 @@ package com.baitcheckerios.pages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
-import com.baitcheckerios.library.BasePage;
+import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.library.GenericLib;
 import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
-public class LoginPageWeb extends BasePage<WebDriver> implements LoginElement {
+public class LoginPageWeb extends Baselib implements LoginElement {
 
 	public LoginPageWeb(WebDriver driver) {
-		super(driver);
+//		super(driver);
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
 	@FindBy(xpath = "//input[@placeholder='Email']")

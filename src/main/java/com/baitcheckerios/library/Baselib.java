@@ -2,15 +2,12 @@ package com.baitcheckerios.library;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -45,7 +42,7 @@ public class Baselib {
 //			desiredCapabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13");
 			desiredCapabilities.setCapability("newCommandTimeout", 450000);
 			desiredCapabilities.setCapability("autoGrantPermissions", true);
-			desiredCapabilities.setCapability(MobileCapabilityType.APP, file.getAbsolutePath());
+//			desiredCapabilities.setCapability(MobileCapabilityType.APP, file.getAbsolutePath());
 			androidDriver = new AndroidDriver(new URL("http://0.0.0.0:4723"), desiredCapabilities);
 			androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		} else if (platform.equalsIgnoreCase("ios")) {
