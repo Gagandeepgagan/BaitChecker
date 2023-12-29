@@ -24,13 +24,16 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	}
 
 	@FindBy(xpath = "//android.widget.EditText")
-	private WebElement emailField;
+	private List<WebElement> emailField;
 	
 //	@FindBy(xpath = "//android.widget.EditText[@text='Email']")
 //	private WebElement emailField;
 
-	@FindBy(xpath = "//android.widget.EditText[@text='Password']")
+	@FindBy(xpath = "//android.widget.EditText[2]")
 	private WebElement passwordField;
+	
+//	@FindBy(xpath = "//android.widget.EditText[@text='Password']")
+//	private WebElement passwordField;
 
 	@FindBy(xpath = "//android.view.ViewGroup[@content-desc='Log in']")
 	private WebElement loginBtn;
@@ -44,8 +47,8 @@ public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> imp
 	
 			MobileUtility.printLogInfo(" inside LoginPageAndroid : Login ");
 			driver.activateApp("com.baitchecker");
-			MobileUtility.type(emailField, email, "email", driver);
-			MobileUtility.type(passwordField, pass, "pass", driver);
+			MobileUtility.type(emailField.get(0), email, "email", driver);
+			MobileUtility.type(emailField.get(1), pass, "pass", driver);
 			MobileUtility.clickElement(loginBtn, driver, "loginBtn");
 			String screenshotName="loginAndroid"+MobileUtility.getDate();
 			MobileUtility.capture(driver, screenshotName);
