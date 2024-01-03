@@ -13,11 +13,11 @@ import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
-public class EmployeePageAndroid extends BasePage<AndroidDriver<MobileElement>> implements EmployeeElement {
+public class EmployeePageIos extends BasePage<IOSDriver<MobileElement>> implements EmployeeElement {
 
-	public EmployeePageAndroid(AndroidDriver<MobileElement> driver) {
+	public EmployeePageIos(IOSDriver<MobileElement> driver) {
 		super(driver);
 	}
 

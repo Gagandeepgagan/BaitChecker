@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.LogoutElement;
 import com.baitcheckerios.pages.LogoutPageAndroid;
+import com.baitcheckerios.pages.LogoutPageIos;
 import com.baitcheckerios.pages.LogoutPageWeb;
 import com.baitcheckerios.util.MobileUtility;
 
@@ -25,7 +26,7 @@ public class LogoutTest extends Baselib {
 
 		} else if (platform.equals("ios")) {
 			System.out.println("IOS");
-			
+			logoutElement = new LogoutPageIos(iosDriver);
 
 		} else if (platform.equals("android")) {
 			System.out.println("ANDROID");

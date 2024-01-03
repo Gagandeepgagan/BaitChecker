@@ -1,6 +1,5 @@
 package com.baitcheckerios.pages;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
@@ -15,7 +14,6 @@ import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.Activity;
 import io.appium.java_client.android.AndroidDriver;
 
 public class LoginPageAndroid extends BasePage<AndroidDriver<MobileElement>> implements LoginElement {

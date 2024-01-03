@@ -47,7 +47,6 @@ public class LoginTest extends Baselib {
 				{ "gagandeep.bains@vtnetzwelt.com", "" }, { "", "Password@123" },
 				{ "gagandeep.bains@vtnetzwelt.com", "Test@123" }, { "gagandeep.bains@vtnetzwelt", "Password@123" },
 				{ "gagandeep.bains+6@vtnetzwelt.com", "Password@123" },
-
 				{ "gagandeep.bains@vtnetzwelt.com", "Password@123" } };
 	}
 

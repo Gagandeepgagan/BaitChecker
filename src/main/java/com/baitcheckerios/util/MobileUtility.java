@@ -439,6 +439,7 @@ public class MobileUtility {
 			element.click();
 			element.clear();
 			element.sendKeys(value);
+			waitForElementToLoad(1000);
 			hideKeyboard(driver);
 			printLogInfo("---------hide keyboard  ---------");
 			MyExtentListeners.test

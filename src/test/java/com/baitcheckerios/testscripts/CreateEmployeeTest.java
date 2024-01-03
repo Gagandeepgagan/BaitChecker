@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.EmployeeElement;
 import com.baitcheckerios.pages.EmployeePageAndroid;
+import com.baitcheckerios.pages.EmployeePageIos;
 import com.baitcheckerios.pages.EmployeePageWeb;
 import com.baitcheckerios.util.MobileUtility;
 
@@ -24,7 +25,7 @@ public class CreateEmployeeTest extends Baselib {
 
 		} else if (platform.equals("ios")) {
 			System.out.println("IOS");
-			
+			employeeElement = new EmployeePageIos(iosDriver);
 
 		} else if (platform.equals("android")) {
 			System.out.println("ANDROID");

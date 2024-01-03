@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.baitcheckerios.library.Baselib;
 import com.baitcheckerios.pages.CustomerElement;
 import com.baitcheckerios.pages.CustomerPageAndroid;
+import com.baitcheckerios.pages.CustomerPageIos;
 import com.baitcheckerios.pages.CustomerPageWeb;
 import com.baitcheckerios.util.MobileUtility;
 
@@ -25,7 +26,7 @@ public class CreateCustomerTest extends Baselib {
 //			customerPageWeb= new CustomerPageWeb(driver);
 		} else if (platform.equals("ios")) {
 			System.out.println("IOS");
-			
+			customerElement = new CustomerPageIos(iosDriver);
 
 		} else if (platform.equals("android")) {
 			System.out.println("ANDROID");

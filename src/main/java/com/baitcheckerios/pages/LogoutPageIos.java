@@ -1,7 +1,5 @@
 package com.baitcheckerios.pages;
 
-import java.util.List;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -14,33 +12,41 @@ import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
-public class LogoutPageAndroid extends BasePage<AndroidDriver<MobileElement>> implements LogoutElement {
+public class LogoutPageIos extends BasePage<IOSDriver<MobileElement>> implements LogoutElement {
 
-	public LogoutPageAndroid(AndroidDriver<MobileElement> driver) {
+	public LogoutPageIos(IOSDriver<MobileElement> driver) {
 		super(driver);
 	}
+	
 
-	@FindBy(xpath = "//android.widget.ImageView")
-	private List<WebElement> logoutBtn;
+	@FindBy(xpath = "(//XCUIElementTypeOther[@name='show customers'])/ancestor::XCUIElementTypeOther/following-sibling::XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]")
+	private WebElement logoutBtn;
 
-	@FindBy(xpath = "//android.view.ViewGroup[@content-desc='Yes, logout']")
+	/*
+	 * @iOSXCUITFindBy(iOSNsPredicate="name == 'Yes, logout'") private WebElement
+	 * logoutConfirmBtn;
+	 */
+
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Yes, logout']")
 	private WebElement logoutConfirmBtn;
 
-	@FindBy(xpath = "//android.widget.TextView[@text='Log in again']")
+//	 @iOSXCUITFindBy(iOSClassChain=" **/XCUIElementTypeOther[`name=='Log in again'`]")
+//	 private WebElement loginAgainBtn;
+
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Log in again']")
 	private WebElement loginAgainBtn;
 
+	
+
 	public void logout() throws Exception {
-		MobileUtility.printLogInfo(" inside LoginPageAndroid : Logout");
-		MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 1), driver, "logoutBtn");
+		MobileUtility.printLogInfo(" inside LoginPageIos : Logout  ");
+		MobileUtility.clickElement(logoutBtn, driver, "logoutBtn");
 		MobileUtility.clickElement(logoutConfirmBtn, driver, "logoutConfirmBtn");
-//		MobileUtility.waitForElement(loginAgainBtn, driver, "loginAgainBtn", 10);
-		
-		String screenshotName="logoutAndroid"+MobileUtility.getDate();
+		String screenshotName = "logoutIos" + MobileUtility.getDate();
 		MobileUtility.capture(driver, screenshotName);
 		boolean isLoginBtnDisplayed = MobileUtility.isElementDisplayed(loginAgainBtn);
-		
 		if (Boolean.TRUE.equals(isLoginBtnDisplayed)) {
 			MyExtentListeners.test.pass(MarkupHelper.createLabel(
 					"Verify user is able to Logout" + " || User is able to Logout successfully!", ExtentColor.GREEN));

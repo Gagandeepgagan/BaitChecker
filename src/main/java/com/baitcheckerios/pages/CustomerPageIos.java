@@ -2,6 +2,7 @@ package com.baitcheckerios.pages;
 
 import java.util.List;
 
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
@@ -14,11 +15,11 @@ import com.baitcheckerios.listener.MyExtentListeners;
 import com.baitcheckerios.util.MobileUtility;
 
 import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
-public class CustomerPageAndroid extends BasePage<AndroidDriver<MobileElement>> implements CustomerElement {
+public class CustomerPageIos extends BasePage<IOSDriver<MobileElement>> implements CustomerElement {
 
-	public CustomerPageAndroid(AndroidDriver<MobileElement> driver) {
+	public CustomerPageIos(IOSDriver<MobileElement> driver) {
 		super(driver);
 	}
 
@@ -27,54 +28,76 @@ public class CustomerPageAndroid extends BasePage<AndroidDriver<MobileElement>> 
 	@FindBy(xpath = "//android.widget.ImageView")
 	private List<WebElement> logoutBtn;
 
-	@FindBy(xpath = "//android.widget.TextView[@text='Create customer account']")
+	
+	@FindBy(xpath="(//XCUIElementTypeOther[@name='show customers'])/ancestor::XCUIElementTypeOther/following-sibling::XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]")
+	private WebElement plusBtn;
+	
+	
+	
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Create customer account']")
 	private WebElement createCustomerAccount;
+	
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Create employee account']")
+	private WebElement createEmployeeAccount;
 
-	@FindBy(xpath = "//android.widget.EditText[@text='Company name']")
+	@FindBy(xpath = "//XCUIElementTypeTextField[@value='Company name']")
 	private WebElement companyName;
 
-	@FindBy(xpath = "//android.widget.TextView[@text='Next step']")
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Next step']")
 	private WebElement nextStepBtn;
-
-	@FindBy(xpath = "//android.widget.TextView[@text='Take photo of floor plan']")
-	private WebElement takePhotoBtn;
-
-	@FindBy(xpath = "//android.widget.ImageView[@content-desc='Shutter']")
+	
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Take photo of floor plan']" )
+	private WebElement  takePhotoBtn;
+	
+	@FindBy(xpath = "//XCUIElementTypeButton[@name='OK']" )
+	private WebElement okBtn;
+	
+	@FindBy(xpath = "//XCUIElementTypeButton[@name='PhotoCapture']" )
 	private WebElement cameraBtn;
-
-	@FindBy(xpath = "//android.widget.ImageButton[@content-desc='Done']")
+	
+	@FindBy(xpath = "//XCUIElementTypeStaticText[@name='Use Photo']" )
 	private WebElement doneBtn;
-
-	@FindBy(xpath = "//android.widget.TextView[@content-desc='Crop']")
+	
+	@FindBy(xpath = "//XCUIElementTypeStaticText[@name='Choose']" )
 	private WebElement cropBtn;
+	
 
-	@FindBy(xpath = "//android.widget.TextView[@text='Save to create customer']")
+	@FindBy(xpath = "//XCUIElementTypeOther[@name='Save to create customer']")
 	private WebElement saveToCreateCustomerBtn;
 
-	@FindBy(xpath = "//android.view.ViewGroup[@content-desc='hide customers']/../preceding-sibling::android.view.ViewGroup[last()]/android.view.ViewGroup")
-	private WebElement getCompanyName;
-
-	@FindBy(xpath = "//android.widget.TextView[@text='show customers']")
+	@FindBy(xpath = "(//XCUIElementTypeOther[@name='hide customers'])[1]/preceding-sibling::XCUIElementTypeOther/XCUIElementTypeOther")
+	private List<WebElement> getCompanyName;
+	
+	@FindBy(xpath = "(//XCUIElementTypeOther[@name='show customers'])[2]")
 	private WebElement showCustomers;
 
+	@FindBy(xpath = "(//XCUIElementTypeOther[@name='hide customers'])[2]")
+	private WebElement hideCustomers;
+	
 	public void createCustomer() throws Exception {
-		String nameOfCompany = "Company android";
-		MobileUtility.printLogInfo(" inside LoginPageAndroid : createCustomer");
-		MobileUtility.clickElement(logoutBtn.get(logoutBtn.size() - 3), driver, "plusIcon");
+		String nameOfCompany="dvdf";
+		MobileUtility.printLogInfo(" inside LoginPageIos : createCustomer");
+		MobileUtility.clickElement(plusBtn, driver, "plusIcon");
 		MobileUtility.clickElement(createCustomerAccount, driver, "createCustomerAccount");
-		MobileUtility.type(companyName, nameOfCompany, "companyName", driver);
+		MobileUtility.type(companyName, nameOfCompany+Keys.ENTER,"companyName", driver);
 		MobileUtility.clickElement(nextStepBtn, driver, "nextStepBtn");
 		MobileUtility.clickElement(nextStepBtn, driver, "nextStepBtn");
 		MobileUtility.clickElement(takePhotoBtn, driver, "takePhotoBtn");
+		try {
+			MobileUtility.clickElementSimple(okBtn, driver, "okBtn");
+		}catch(Exception e) {
+			
+		}
 		MobileUtility.clickElement(cameraBtn, driver, "cameraBtn");
 		MobileUtility.clickElement(doneBtn, driver, "doneBtn");
 		MobileUtility.clickElement(cropBtn, driver, "cropBtn");
 		MobileUtility.clickElement(nextStepBtn, driver, "nextStepBtn");
 		MobileUtility.clickElement(saveToCreateCustomerBtn, driver, "saveToCreateCustomerBtn");
 		MobileUtility.clickElement(showCustomers, driver, "showCustomers");
-		MobileUtility.scrollUsingFling(driver);
-	
-		if (getCompanyName.getText().matches(nameOfCompany)) {
+//		MobileUtility.scrollNclick(driver,hideCustomers);
+		MobileUtility.printLogInfo(getCompanyName.get(getCompanyName.size()-1).getText());
+		
+		if (getCompanyName.get(getCompanyName.size()-1).getText().matches(nameOfCompany)) {
 			MyExtentListeners.test.pass(MarkupHelper.createLabel(
 					"Verify user is able create Customer" + " || User is able to create Customer", ExtentColor.GREEN));
 			MyExtentListeners.test.addScreenCaptureFromPath(
